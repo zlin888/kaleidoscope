@@ -5,7 +5,7 @@ LDFLAGS = -fsanitize=address
 VPATH = src
 SRC = ./src
 BIN = ./bin
-OBJ = ./bin/main.o 
+OBJ = main.o 
 EXEC = main.out
 
 all: $(EXEC)
