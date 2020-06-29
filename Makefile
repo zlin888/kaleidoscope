@@ -1,12 +1,12 @@
-CXX = g++
-CXXFLAGS = -Wall -Werror -Wextra -pedantic -std=c++17 -g -fsanitize=address
-LDFLAGS =  -fsanitize=address
+CXX = clang++
+CXXFLAGS = -Werror -Wextra -pedantic -std=c++17 -g -fsanitize=address
+LDFLAGS = -fsanitize=address
 
 VPATH = src
 SRC = ./src
 BIN = ./bin
-OBJ = main.o 
-EXEC = main
+OBJ = ./bin/main.o 
+EXEC = main.out
 
 all: $(EXEC)
 
