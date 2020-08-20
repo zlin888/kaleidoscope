@@ -1,17 +1,27 @@
-CXX = clang++
-CXXFLAGS = -Werror -Wextra -pedantic -std=c++17 -g -fsanitize=address
-LDFLAGS = -fsanitize=address
 
-VPATH = src
-SRC = ./src
-BIN = ./bin
-OBJ = main.o 
-EXEC = main.out
+LLVM_CONFIG?=llvm-config
+ifndef VERBOSE
+QUIET:=@
+endif
 
-all: $(EXEC)
+SRC_DIR?=$(PWD)/src
+TARGET_DIR?=$(PWD)/bin
+COMMON_FLAGS=-O3
+CXX=clang++
+CXXFLAGS+=$(COMMON_FLAGS) $(shell $(LLVM_CONFIG) --cxxflags)
+LDFLAGS+=$(shell $(LLVM_CONFIG) --ldflags --libs) -lpthread -lncurses
 
-$(EXEC): $(OBJ)
-	$(CXX) $(LDFLAGS) -o $@ $(OBJ) $(LBLIBS)
+PROJECT=kaleidoscope
+PROJECT_OBJECTS=main.o
+default: $(PROJECT)
 
-clean:
-	rm -rf $(OBJ) $(EXEC)
+%.o : $(SRC_DIR)/%.cpp
+	@echo Compiling $*.cpp
+	$(CXX) -c $(CXXFLAGS) $<
+
+$(PROJECT) : $(PROJECT_OBJECTS)
+	@echo Linking $@
+	$(CXX) -o $@ $(LDFLAGS) $^
+
+clean::
+	$(QUIET)rm -f $(PROJECT) $(PROJECT_OBJECTS)
